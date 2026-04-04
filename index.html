@@ -261,7 +261,7 @@ async function api(system, content, tokens = 4000) {
     : [{ role: 'user', content }];
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true', 'x-api-key': document.getElementById('apiKey').value },
+    headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true', 'anthropic-version': '2023-06-01', 'x-api-key': document.getElementById('apiKey').value },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: tokens,

@@ -3,87 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TPM Resume Updater — MAANG Edition</title>
+<title>TPM Career Suite — MAANG Edition</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f1a; color: #e2e8f0; min-height: 100vh; }
-
-.header { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); padding: 22px 32px; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 12px; }
-.header h1 { font-size: 20px; font-weight: 700; color: #fff; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f1a; color: #e2e8f0; min-height: 100vh; overflow: hidden; }
+.header { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); padding: 16px 28px; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 12px; }
+.header h1 { font-size: 18px; font-weight: 700; color: #fff; }
 .badge { background: linear-gradient(90deg, #6366f1, #8b5cf6); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
-.header p { font-size: 12px; color: #94a3b8; margin-left: auto; }
-
-.main { display: grid; grid-template-columns: 1fr 1fr; height: calc(100vh - 68px); }
-.panel { padding: 24px; overflow-y: auto; border-right: 1px solid #1e2d3d; }
-.output-panel { padding: 24px; overflow-y: auto; background: #0d1117; }
-
-.sec-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #6366f1; margin-bottom: 12px; margin-top: 18px; display: flex; align-items: center; gap: 6px; }
-.sec-title:first-child { margin-top: 0; }
-.sec-title::before { content:''; width:3px; height:12px; background:#6366f1; border-radius:2px; display:block; }
-
-.upload-zone { border: 2px dashed #2d3748; border-radius: 10px; padding: 24px 16px; text-align: center; cursor: pointer; background: #111827; position: relative; margin-bottom: 16px; transition: all 0.2s; }
+.api-bar { background: #111827; border-bottom: 1px solid #1e2d3d; padding: 9px 28px; display: flex; align-items: center; gap: 10px; }
+.api-bar label { font-size: 11px; font-weight: 700; color: #6366f1; white-space: nowrap; }
+.api-bar input { flex: 1; max-width: 380px; background: #0d1117; border: 1px solid #2d3748; border-radius: 6px; color: #e2e8f0; font-size: 12px; padding: 7px 10px; font-family: monospace; }
+.api-bar input:focus { outline: none; border-color: #6366f1; }
+.api-bar span { font-size: 10px; color: #4b5563; }
+.tabs { display: flex; border-bottom: 1px solid #1e2d3d; background: #111827; }
+.tab { padding: 11px 26px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; gap: 7px; }
+.tab:hover { color: #94a3b8; }
+.tab.active { color: #a5b4fc; border-bottom-color: #6366f1; background: #0f0f1a; }
+.tab-content { display: none; height: calc(100vh - 118px); }
+.tab-content.active { display: grid; grid-template-columns: 1fr 1fr; }
+.panel { padding: 20px 24px; overflow-y: auto; border-right: 1px solid #1e2d3d; }
+.out { padding: 20px 24px; overflow-y: auto; background: #0d1117; }
+.sec { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #6366f1; margin-bottom: 10px; margin-top: 16px; display: flex; align-items: center; gap: 6px; }
+.sec:first-child { margin-top: 0; }
+.sec::before { content:''; width:3px; height:11px; background:#6366f1; border-radius:2px; display:block; }
+label { display: block; font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 5px; }
+select, textarea, input[type=text], input[type=password] { width: 100%; background: #111827; border: 1px solid #2d3748; border-radius: 7px; color: #e2e8f0; font-size: 12px; padding: 9px 11px; font-family: inherit; transition: border-color 0.2s; }
+select:focus, textarea:focus, input:focus { outline: none; border-color: #6366f1; }
+textarea { resize: vertical; }
+select option { background: #1e293b; }
+.mb { margin-bottom: 13px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 13px; }
+.btn { width: 100%; padding: 13px; color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+.btn-purple { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.btn-purple:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+.btn-green { background: linear-gradient(135deg, #059669, #10b981); }
+.btn-green:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(16,185,129,0.35); }
+.btn-teal { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+.btn-teal:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(6,182,212,0.35); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+.upload-zone { border: 2px dashed #2d3748; border-radius: 10px; padding: 20px 16px; text-align: center; cursor: pointer; background: #111827; position: relative; margin-bottom: 14px; transition: all 0.2s; }
 .upload-zone:hover, .upload-zone.drag { border-color: #6366f1; background: #1a1f35; }
 .upload-zone.has-file { border-color: #10b981; background: #0d1f17; }
 .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-.upload-zone .icon { font-size: 28px; margin-bottom: 8px; }
-.upload-zone h3 { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
+.upload-zone .icon { font-size: 26px; margin-bottom: 7px; }
+.upload-zone h3 { font-size: 13px; font-weight: 600; color: #e2e8f0; margin-bottom: 3px; }
 .upload-zone p { font-size: 11px; color: #64748b; }
 .file-tag { display:none; font-size:12px; color:#10b981; font-weight:600; margin-top:6px; }
-
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-label { display: block; font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
-select, textarea { width: 100%; background: #111827; border: 1px solid #2d3748; border-radius: 7px; color: #e2e8f0; font-size: 12px; padding: 10px; font-family: inherit; transition: border-color 0.2s; }
-select:focus, textarea:focus { outline: none; border-color: #6366f1; }
-textarea { resize: vertical; }
-select option { background: #1e293b; }
-
-.mb { margin-bottom: 14px; }
-
-.run-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; margin-top: 4px; }
-.run-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
-.run-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-/* Right panel */
-.idle { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 70%; text-align: center; }
-.idle .big { font-size: 48px; opacity: 0.25; margin-bottom: 12px; }
-.idle p { font-size: 12px; color: #4b5563; line-height: 1.6; }
-
-.steps { display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.step { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 8px; background: #111827; border: 1px solid #1f2937; font-size: 12px; transition: all 0.3s; }
+.steps { display: none; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+.step { display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 8px; background: #111827; border: 1px solid #1f2937; font-size: 12px; transition: all 0.3s; }
 .step.active { border-color: #6366f1; background: #1a1f35; color: #c7d2fe; }
 .step.done { border-color: #10b981; background: #0d1f17; color: #6ee7b7; }
 .step.fail { border-color: #ef4444; background: #1f1015; color: #fca5a5; }
-.spin { width:16px; height:16px; border:2px solid #4c1d95; border-top-color:#8b5cf6; border-radius:50%; animation:spin 0.8s linear infinite; min-width:16px; }
+.spin { width:15px; height:15px; border:2px solid #4c1d95; border-top-color:#8b5cf6; border-radius:50%; animation:spin 0.8s linear infinite; min-width:15px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.results { display: none; flex-direction: column; gap: 14px; }
-
-.card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 16px; }
-.card h3 { font-size: 11px; font-weight: 700; color: #a5b4fc; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-
-.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 15px; margin-bottom: 12px; }
+.card h3 { font-size: 11px; font-weight: 700; color: #a5b4fc; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 11px; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
 .bar-lbl { font-size: 11px; color: #94a3b8; width: 130px; flex-shrink: 0; }
 .bar { flex:1; height:5px; background:#1f2937; border-radius:3px; overflow:hidden; }
 .bar-fill { height:100%; border-radius:3px; }
 .bar-num { font-size: 11px; font-weight: 700; min-width: 28px; text-align: right; }
-
 .prob { font-size: 11px; color: #94a3b8; margin-top: 10px; padding-top: 10px; border-top: 1px solid #1f2937; }
-
 .kw-grid { display: flex; flex-wrap: wrap; gap: 5px; }
 .kw { font-size: 10px; padding: 2px 9px; border-radius: 20px; font-weight: 600; background: #064e3b; color: #6ee7b7; border: 1px solid #065f46; }
-
 .change { background: #0d1117; border: 1px solid #1f2937; border-radius: 7px; padding: 10px 12px; font-size: 11px; margin-bottom: 8px; }
 .change .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; margin-bottom: 3px; }
-.change .before { color: #f87171; text-decoration: line-through; margin-bottom: 6px; line-height: 1.5; }
+.change .before { color: #f87171; text-decoration: line-through; margin-bottom: 5px; line-height: 1.5; }
 .change .after { color: #6ee7b7; line-height: 1.5; }
-
 .summary-box { background: #0d1f17; border: 1px solid #064e3b; border-radius: 7px; padding: 12px; font-size: 12px; color: #a7f3d0; line-height: 1.6; font-style: italic; }
-
-.dl-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-.dl-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(16,185,129,0.35); }
-
-.err { background: #1f1015; border: 1px solid #ef4444; border-radius: 8px; padding: 12px; color: #fca5a5; font-size: 12px; display: none; margin-bottom: 12px; }
-
+.err { background: #1f1015; border: 1px solid #ef4444; border-radius: 8px; padding: 11px; color: #fca5a5; font-size: 12px; display: none; margin-bottom: 12px; }
+.idle { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 65%; text-align: center; }
+.idle .big { font-size: 44px; opacity: 0.2; margin-bottom: 12px; }
+.idle p { font-size: 12px; color: #4b5563; line-height: 1.6; }
+.results { display: none; flex-direction: column; }
+.job-card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
+.job-card:hover { border-color: #374151; }
+.job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.job-title { font-size: 13px; font-weight: 700; color: #e2e8f0; }
+.job-co { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.fit-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; display: block; margin-top: 4px; text-align: center; }
+.fit-high { background: #064e3b; color: #6ee7b7; border: 1px solid #065f46; }
+.fit-med { background: #1c1917; color: #fbbf24; border: 1px solid #78350f; }
+.fit-low { background: #1f1015; color: #f87171; border: 1px solid #7f1d1d; }
+.job-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.job-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #1f2937; color: #94a3b8; }
+.job-desc { font-size: 11px; color: #64748b; line-height: 1.5; margin-bottom: 10px; }
+.job-actions { display: flex; gap: 8px; }
+.job-btn { flex: 1; padding: 7px; font-size: 11px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+.job-btn-apply { background: #6366f1; color: #fff; }
+.job-btn-apply:hover { background: #4f46e5; }
+.job-btn-tailor { background: #1f2937; color: #94a3b8; }
+.job-btn-tailor:hover { background: #374151; color: #e2e8f0; }
+.score-ring { font-size: 22px; font-weight: 800; color: #6ee7b7; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: #111827; border: 1px solid #2d3748; border-radius: 12px; padding: 24px; width: 90%; max-width: 640px; max-height: 82vh; overflow-y: auto; }
+.modal h2 { font-size: 15px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+.modal .msub { font-size: 11px; color: #64748b; margin-bottom: 16px; }
+.modal-sec { margin-bottom: 16px; }
+.modal-sec h4 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; margin-bottom: 8px; }
+.modal-sec p { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+.modal-close { float: right; background: #1f2937; border: none; color: #94a3b8; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+.modal-spin { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 13px; padding: 24px 0; }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
 </style>
@@ -91,17 +112,25 @@ select option { background: #1e293b; }
 <body>
 
 <div class="header">
-  <h1>TPM Resume Updater</h1>
+  <h1>TPM Career Suite</h1>
   <span class="badge">MAANG Edition</span>
-  <p>Upload PDF → AI review → Download DOCX</p>
 </div>
 
-<div class="main">
+<div class="api-bar">
+  <label>🔑 Anthropic API Key</label>
+  <input type="password" id="apiKey" placeholder="sk-ant-api03-..." />
+  <span>console.anthropic.com → API Keys &nbsp;·&nbsp; never stored</span>
+</div>
 
-  <!-- LEFT -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('resume')">📄 &nbsp;Resume Updater</div>
+  <div class="tab" onclick="switchTab('hireiq')">🎯 &nbsp;HireIQ — Job Finder</div>
+</div>
+
+<!-- ═══ TAB 1: RESUME UPDATER ═══ -->
+<div class="tab-content active" id="tab-resume">
   <div class="panel">
-    <div class="sec-title">Step 1 — Upload Resume (PDF)</div>
-
+    <div class="sec">Step 1 — Upload Resume (PDF)</div>
     <div class="upload-zone" id="zone">
       <input type="file" id="fileIn" accept=".pdf" />
       <div class="icon">📄</div>
@@ -110,8 +139,7 @@ select option { background: #1e293b; }
       <div class="file-tag" id="fileTag"></div>
     </div>
 
-    <div class="sec-title">Step 2 — Target Context</div>
-
+    <div class="sec">Step 2 — Target Context</div>
     <div class="row2">
       <div>
         <label>Target Level</label>
@@ -139,345 +167,361 @@ select option { background: #1e293b; }
 
     <div class="mb">
       <label>Additional Context (optional)</label>
-      <textarea id="ctx" rows="3" placeholder="e.g. 12 years exp, AI infra focus, want to highlight Awaaz Vakil and multilingual audio pipeline work..."></textarea>
+      <textarea id="ctx" rows="3" placeholder="e.g. 12 years exp, AI infra focus, highlight Awaaz Vakil and multilingual audio pipeline..."></textarea>
     </div>
-
     <div class="mb">
-      <label>Paste Skill Recommendations (optional — leave blank to auto-generate)</label>
-      <textarea id="recs" rows="4" placeholder="Paste TPM skill review output here, or leave blank and Claude will generate recommendations automatically..."></textarea>
+      <label>Paste Skill Recommendations (optional)</label>
+      <textarea id="recs" rows="3" placeholder="Paste TPM skill review output here, or leave blank to auto-generate..."></textarea>
     </div>
-
-
-    <div class="mb">
-      <label>🔑 Anthropic API Key (required to run locally)</label>
-      <input type="password" id="apiKey" placeholder="sk-ant-..." style="width:100%;background:#111827;border:1px solid #2d3748;border-radius:7px;color:#e2e8f0;font-size:12px;padding:10px;font-family:inherit;" />
-      <p style="font-size:10px;color:#4b5563;margin-top:4px;">Get yours at console.anthropic.com — never stored, only sent directly to Anthropic API.</p>
-    </div>
-
-    <button class="run-btn" id="runBtn" onclick="run()" disabled>
-      🚀 Review & Rewrite Resume
-    </button>
+    <button class="btn btn-purple" id="runBtn" onclick="runResume()" disabled>🚀 Review &amp; Rewrite Resume</button>
   </div>
 
-  <!-- RIGHT -->
-  <div class="output-panel">
-    <div class="sec-title">Live Output</div>
-
+  <div class="out">
     <div class="err" id="errBox"></div>
-
-    <div class="idle" id="idle">
-      <div class="big">✨</div>
-      <p>Upload your resume and hit the button.<br>Claude will review, rewrite, and generate<br>your MAANG-ready resume file.</p>
-    </div>
-
+    <div class="idle" id="idle"><div class="big">✨</div><p>Upload your resume and hit the button.<br>Claude will review, rewrite, and generate<br>your MAANG-ready resume file.</p></div>
     <div class="steps" id="steps">
       <div class="step" id="s1">📖 &nbsp;Reading PDF resume...</div>
       <div class="step" id="s2">🔍 &nbsp;Running MAANG TPM analysis...</div>
-      <div class="step" id="s3">✍️ &nbsp;Rewriting bullets & summary...</div>
+      <div class="step" id="s3">✍️ &nbsp;Rewriting bullets &amp; summary...</div>
       <div class="step" id="s4">🔑 &nbsp;Injecting MAANG keywords...</div>
       <div class="step" id="s5">📝 &nbsp;Building resume document...</div>
       <div class="step" id="s6">✅ &nbsp;Done!</div>
     </div>
-
     <div class="results" id="results">
-
-      <div class="card" id="scoreCard">
-        <h3>📊 Score Card</h3>
-        <div id="bars"></div>
-      </div>
-
-      <div class="card">
-        <h3>🔑 Keywords Injected</h3>
-        <div class="kw-grid" id="kwGrid"></div>
-      </div>
-
-      <div class="card">
-        <h3>✍️ Bullet Rewrites</h3>
-        <div id="changesList"></div>
-      </div>
-
-      <div class="card">
-        <h3>🎯 New Professional Summary</h3>
-        <div class="summary-box" id="summaryBox"></div>
-      </div>
-
-      <button class="dl-btn" id="dlBtn" onclick="download()">
-        ⬇️ &nbsp;Download Updated Resume (.doc)
-      </button>
-
+      <div class="card"><h3>📊 Score Card</h3><div id="bars"></div></div>
+      <div class="card"><h3>🔑 Keywords Injected</h3><div class="kw-grid" id="kwGrid"></div></div>
+      <div class="card"><h3>✍️ Bullet Rewrites</h3><div id="changesList"></div></div>
+      <div class="card"><h3>🎯 New Professional Summary</h3><div class="summary-box" id="summaryBox"></div></div>
+      <button class="btn btn-green" id="dlBtn" onclick="download()" style="display:none">⬇️ &nbsp;Download Updated Resume (.doc)</button>
     </div>
   </div>
 </div>
 
+<!-- ═══ TAB 2: HIREIQ ═══ -->
+<div class="tab-content" id="tab-hireiq">
+  <div class="panel">
+    <div class="sec">Your Resume (for fit scoring)</div>
+    <div class="upload-zone" id="hireZone">
+      <input type="file" id="hireFileIn" accept=".pdf" />
+      <div class="icon">📄</div>
+      <h3>Drop your PDF resume here</h3>
+      <p>or click to browse</p>
+      <div class="file-tag" id="hireFileTag"></div>
+    </div>
+    <p style="font-size:10px;color:#4b5563;margin-top:-10px;margin-bottom:14px;">Uploaded in Tab 1? Shared automatically ✓</p>
+
+    <div class="sec">Search Jobs via API</div>
+    <div class="row2">
+      <div>
+        <label>Job Title / Role</label>
+        <input type="text" id="jobQuery" value="Staff Technical Program Manager" placeholder="Staff TPM, AI Program Manager..." />
+      </div>
+      <div>
+        <label>Location</label>
+        <input type="text" id="jobLocation" value="India" placeholder="Bangalore, Remote, US..." />
+      </div>
+    </div>
+    <div class="mb">
+      <label>JSearch API Key (RapidAPI) &nbsp;<a href="https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch" target="_blank" style="color:#6366f1;font-size:10px;text-decoration:none">Get free key →</a></label>
+      <input type="password" id="jsearchKey" placeholder="Paste your RapidAPI key here (optional — Claude generates sample jobs if blank)" />
+    </div>
+    <button class="btn btn-teal mb" id="searchBtn" onclick="searchJobs()">🔍 Search &amp; Score Jobs</button>
+
+    <div class="sec">Or Paste Job Descriptions</div>
+    <div class="mb">
+      <textarea id="pasteJDs" rows="7" placeholder="Paste one or more job descriptions here.&#10;Separate multiple JDs with a line containing only: ---&#10;&#10;Claude will score each one against your resume and rank them."></textarea>
+    </div>
+    <button class="btn btn-purple" id="scoreBtn" onclick="scoreJDs()">🎯 Score Pasted JDs Against Resume</button>
+  </div>
+
+  <div class="out">
+    <div class="err" id="hireErr"></div>
+    <div class="idle" id="hireIdle"><div class="big">🎯</div><p>Search jobs via API or paste JDs on the left.<br>Claude scores each role against your resume<br>and ranks them by fit score.</p></div>
+    <div class="steps" id="hireSteps">
+      <div class="step" id="h1">🔍 &nbsp;Fetching jobs...</div>
+      <div class="step" id="h2">📄 &nbsp;Reading your resume...</div>
+      <div class="step" id="h3">🧠 &nbsp;Scoring fit for each role...</div>
+      <div class="step" id="h4">📊 &nbsp;Ranking by match score...</div>
+    </div>
+    <div id="jobResults"></div>
+  </div>
+</div>
+
+<!-- Tailor Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕ Close</button>
+    <h2 id="modalTitle">Tailored Application Package</h2>
+    <div class="msub" id="modalSub"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
-let pdfB64 = null, docData = null, reviewData = null;
+const PROXY = 'https://tpm-resume-updater.itisha-dubey6.workers.dev';
+let pdfB64 = null, docData = null, reviewData = null, hirePdfB64 = null;
 
-// Upload
-const zone = document.getElementById('zone');
-const fileIn = document.getElementById('fileIn');
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', ['resume','hireiq'][i] === t));
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+}
 
-fileIn.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0]); });
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
-zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
-zone.addEventListener('drop', e => {
-  e.preventDefault(); zone.classList.remove('drag');
-  const f = e.dataTransfer.files[0];
-  if (f && f.type === 'application/pdf') loadFile(f);
-});
+function setupUpload(zoneId, inputId, tagId, isHire) {
+  const zone = document.getElementById(zoneId);
+  const inp = document.getElementById(inputId);
+  inp.addEventListener('change', e => { if (e.target.files[0]) loadFile(e.target.files[0], tagId, zone, isHire); });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type === 'application/pdf') loadFile(f, tagId, zone, isHire);
+  });
+}
 
-function loadFile(f) {
+function loadFile(f, tagId, zone, isHire) {
   const r = new FileReader();
   r.onload = e => {
-    pdfB64 = e.target.result.split(',')[1];
-    const tag = document.getElementById('fileTag');
-    tag.style.display = 'block';
-    tag.textContent = '✓ ' + f.name;
+    const b64 = e.target.result.split(',')[1];
+    if (isHire) hirePdfB64 = b64;
+    else { pdfB64 = b64; hirePdfB64 = b64; }
+    const tag = document.getElementById(tagId);
+    tag.style.display = 'block'; tag.textContent = '✓ ' + f.name;
     zone.classList.add('has-file');
-    document.getElementById('runBtn').disabled = false;
+    if (!isHire) document.getElementById('runBtn').disabled = false;
   };
   r.readAsDataURL(f);
 }
 
-// Step helpers
-function stepActive(id, txt) {
-  const el = document.getElementById(id);
-  el.className = 'step active';
-  el.innerHTML = `<div class="spin"></div> ${txt}`;
-}
-function stepDone(id, txt) {
-  const el = document.getElementById(id);
-  el.className = 'step done';
-  el.innerHTML = `✅ &nbsp;${txt}`;
-}
-function stepFail(id, txt) {
-  const el = document.getElementById(id);
-  el.className = 'step fail';
-  el.innerHTML = `❌ &nbsp;${txt}`;
-}
+setupUpload('zone','fileIn','fileTag',false);
+setupUpload('hireZone','hireFileIn','hireFileTag',true);
 
-async function api(system, content, tokens = 4000) {
-  const msgs = Array.isArray(content)
-    ? [{ role: 'user', content }]
-    : [{ role: 'user', content }];
-  const res = await fetch('https://tpm-resume-updater.itisha-dubey6.workers.dev', {
+async function api(system, content, tokens=4000) {
+  const key = document.getElementById('apiKey').value;
+  if (!key) throw new Error('Please enter your Anthropic API key at the top of the page.');
+  const res = await fetch(PROXY, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': document.getElementById('apiKey').value },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: tokens,
-      system,
-      messages: msgs
-    })
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: tokens, system,
+      messages: [{ role:'user', content: Array.isArray(content) ? content : [{ type:'text', text: content }] }] })
   });
-  if (!res.ok) { const errData = await res.json(); throw new Error(errData?.error?.message || 'API error ' + res.status); }
+  if (!res.ok) { const d = await res.json(); throw new Error(d?.error?.message || 'API error ' + res.status); }
   const d = await res.json();
-  return d.content.filter(b => b.type === 'text').map(b => b.text).join('');
+  return d.content.filter(b => b.type==='text').map(b => b.text).join('');
 }
 
 function cleanJSON(raw) {
-  let s = raw.trim();
-  if (s.startsWith('```')) s = s.replace(/^```json?\n?/, '').replace(/\n?```$/, '');
-  // Find first { and last } to extract JSON
-  const start = s.indexOf('{');
-  const end = s.lastIndexOf('}');
-  if (start !== -1 && end !== -1) s = s.slice(start, end + 1);
+  let s = raw.trim().replace(/^```json?\n?/,'').replace(/\n?```$/,'');
+  const a = s.indexOf('{'), z = s.lastIndexOf('}');
+  if (a !== -1 && z !== -1) return s.slice(a, z+1);
+  const a2 = s.indexOf('['), z2 = s.lastIndexOf(']');
+  if (a2 !== -1 && z2 !== -1) return s.slice(a2, z2+1);
   return s;
 }
 
-async function run() {
+function sA(id,t){const e=document.getElementById(id);e.className='step active';e.innerHTML=`<div class="spin"></div> ${t}`;}
+function sD(id,t){const e=document.getElementById(id);e.className='step done';e.innerHTML=`✅ &nbsp;${t}`;}
+function sF(id,t){const e=document.getElementById(id);e.className='step fail';e.innerHTML=`❌ &nbsp;${t}`;}
+
+// ═══ RESUME UPDATER ═══
+async function runResume() {
   const btn = document.getElementById('runBtn');
   btn.disabled = true;
   document.getElementById('idle').style.display = 'none';
   document.getElementById('errBox').style.display = 'none';
   document.getElementById('results').style.display = 'none';
-  const stepsEl = document.getElementById('steps');
-  stepsEl.style.display = 'flex';
+  document.getElementById('steps').style.display = 'flex';
+  ['s1','s2','s3','s4','s5','s6'].forEach(id => {const e=document.getElementById(id);e.className='step';});
 
-  const level = document.getElementById('level').value;
-  const company = document.getElementById('company').value;
-  const ctx = document.getElementById('ctx').value;
-  const recs = document.getElementById('recs').value;
-
+  const level=document.getElementById('level').value, co=document.getElementById('company').value;
+  const ctx=document.getElementById('ctx').value, recs=document.getElementById('recs').value;
   try {
-    // S1: Read PDF
-    stepActive('s1', 'Reading your PDF resume...');
-    const resumeText = await api(
-      'You are a precise document reader. Extract ALL resume text faithfully, preserving structure.',
-      [
-        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: pdfB64 } },
-        { type: 'text', text: 'Extract ALL text from this resume. Return complete text preserving every section, bullet, date, and line.' }
-      ],
-      2000
-    );
-    stepDone('s1', 'Resume text extracted');
+    sA('s1','Reading your PDF resume...');
+    const rt = await api('Extract ALL resume text faithfully.',
+      [{type:'document',source:{type:'base64',media_type:'application/pdf',data:pdfB64}},
+       {type:'text',text:'Extract ALL text. Return every section, bullet, date, line.'}], 2000);
+    sD('s1','Resume text extracted');
 
-    // S2: TPM Review
-    stepActive('s2', 'Running MAANG TPM analysis...');
-    const reviewPrompt = `Analyze this resume for a ${level} role at ${company}.
+    sA('s2','Running MAANG TPM analysis...');
+    const r2 = await api('Return ONLY valid JSON. No markdown.',
+      `Analyze for ${level} at ${co}. RESUME:${rt.slice(0,2500)} CONTEXT:${ctx||'None'} IMPROVEMENTS:${recs||'Auto'}
+Return ONLY: {"scores":{"ats":7,"keywords":5,"impact":4,"maang_bar":6,"structure":8},"before":"Low","after":"High","summary":"3-4 sentence MAANG summary for ${level} at ${co}","keywords":["k1","k2","k3","k4","k5","k6"],"rewrites":[{"orig":"orig1","new":"new1 with metric","why":"r1"},{"orig":"orig2","new":"new2","why":"r2"},{"orig":"orig3","new":"new3","why":"r3"}],"ats_fixes":["f1","f2"]}`);
+    reviewData = JSON.parse(cleanJSON(r2));
+    sD('s2','MAANG analysis complete');
 
-RESUME:
-${resumeText.slice(0, 3000)}
+    sA('s3','Rewriting bullets & summary...');
+    const r3 = await api('Return ONLY valid JSON. Bullets max 25 words.',
+      `Rewrite for ${level} at ${co}. New summary:${reviewData.summary} Keywords:${(reviewData.keywords||[]).join(',')} Rewrites:${JSON.stringify(reviewData.rewrites||[])} ORIGINAL:${rt.slice(0,2500)}
+Return ONLY: {"name":"Name","contact":"email|phone|linkedin|city","summary":"summary","experience":[{"title":"T","company":"C","duration":"Mon YYYY – Mon YYYY","bullets":["b1","b2","b3"]}],"skills":["Cat: s1,s2"],"education":[{"degree":"D","school":"S","year":"YYYY"}],"certs":["c1"]}`);
+    const resume = JSON.parse(cleanJSON(r3));
+    sD('s3','Bullets rewritten');
 
-CONTEXT: ${ctx || 'None'}
-IMPROVEMENTS REQUESTED: ${recs || 'Auto-generate from analysis'}
-
-Return ONLY this JSON (no markdown, no extra text):
-{
-  "scores": {"ats":7,"keywords":5,"impact":4,"maang_bar":6,"structure":8},
-  "before": "Low",
-  "after": "High",
-  "summary": "3-4 sentence powerful MAANG-level summary for ${level} at ${company}",
-  "keywords": ["keyword1","keyword2","keyword3","keyword4","keyword5","keyword6"],
-  "rewrites": [
-    {"orig":"original bullet","new":"rewritten bullet with metric","why":"reason"},
-    {"orig":"original bullet 2","new":"rewritten bullet 2","why":"reason"},
-    {"orig":"original bullet 3","new":"rewritten bullet 3","why":"reason"}
-  ],
-  "ats_fixes": ["fix1","fix2","fix3"]
-}`;
-
-    const reviewRaw = await api(
-      'Return ONLY valid complete JSON. No markdown. No explanation. No truncation.',
-      reviewPrompt,
-      4000
-    );
-    reviewData = JSON.parse(cleanJSON(reviewRaw));
-    stepDone('s2', 'MAANG analysis complete');
-
-    // S3: Rewrite resume
-    stepActive('s3', 'Rewriting bullets & elevating language...');
-    const rewritePrompt = `Rewrite this resume for ${level} at ${company}. Apply these changes:
-- New summary: ${reviewData.summary}
-- Inject keywords: ${(reviewData.keywords || []).join(', ')}
-- Apply these rewrites where matching: ${JSON.stringify(reviewData.rewrites || [])}
-
-ORIGINAL RESUME:
-${resumeText.slice(0, 3000)}
-
-Return ONLY this JSON (complete, no truncation):
-{
-  "name": "Full Name",
-  "contact": "email | phone | linkedin | city",
-  "summary": "rewritten summary here",
-  "experience": [
-    {"title":"Job Title","company":"Company","duration":"Mon YYYY – Mon YYYY","bullets":["bullet 1","bullet 2","bullet 3"]}
-  ],
-  "skills": ["Category: skill1, skill2, skill3"],
-  "education": [{"degree":"Degree","school":"School","year":"YYYY"}],
-  "certs": ["cert1"]
-}`;
-
-    const rewriteRaw = await api(
-      'Return ONLY valid complete JSON. No markdown. No explanation. Keep bullets concise (under 25 words each).',
-      rewritePrompt,
-      4000
-    );
-    const resume = JSON.parse(cleanJSON(rewriteRaw));
-    stepDone('s3', 'Bullets rewritten & elevated');
-
-    // S4: Keywords
-    stepActive('s4', 'Cataloguing keyword injections...');
-    await new Promise(r => setTimeout(r, 500));
-    stepDone('s4', 'Keywords injected');
-
-    // S5: Build doc
-    stepActive('s5', 'Building resume document...');
-    docData = buildDoc(resume, level, company);
-    stepDone('s5', 'Document ready');
-
-    // S6: Done
-    stepDone('s6', 'Resume updated & ready!');
-
+    sA('s4','Injecting MAANG keywords...'); await new Promise(r=>setTimeout(r,400)); sD('s4','Keywords injected');
+    sA('s5','Building document...'); docData = buildDoc(resume,level,co); sD('s5','Document ready');
+    sD('s6','Resume updated & ready!');
     renderResults(reviewData);
     document.getElementById('results').style.display = 'flex';
     document.getElementById('dlBtn').style.display = 'flex';
-
-  } catch (err) {
-    console.error(err);
-    const errBox = document.getElementById('errBox');
-    errBox.style.display = 'block';
-    errBox.textContent = '⚠️ ' + (err.message || 'Something went wrong.');
-    ['s1','s2','s3','s4','s5','s6'].forEach(id => {
-      if (document.getElementById(id).classList.contains('active')) stepFail(id, 'Failed');
-    });
+  } catch(err) {
+    const eb=document.getElementById('errBox'); eb.style.display='block'; eb.textContent='⚠️ '+err.message;
+    ['s1','s2','s3','s4','s5','s6'].forEach(id=>{if(document.getElementById(id).classList.contains('active'))sF(id,'Failed');});
   }
-  btn.disabled = false;
+  btn.disabled=false;
 }
 
 function renderResults(d) {
-  const scoreConfig = [
-    { key: 'ats',       label: 'ATS Compatibility',  color: '#6366f1' },
-    { key: 'keywords',  label: 'Keyword Coverage',    color: '#8b5cf6' },
-    { key: 'impact',    label: 'Impact & Metrics',    color: '#ec4899' },
-    { key: 'maang_bar', label: 'MAANG Bar Alignment', color: '#f59e0b' },
-    { key: 'structure', label: 'Structure & Format',  color: '#10b981' },
-  ];
-  let barsHTML = scoreConfig.map(({ key, label, color }) => {
-    const v = (d.scores || {})[key] || 0;
-    return `<div class="bar-row">
-      <span class="bar-lbl">${label}</span>
-      <div class="bar"><div class="bar-fill" style="width:${v*10}%;background:${color}"></div></div>
-      <span class="bar-num" style="color:${color}">${v}/10</span>
-    </div>`;
-  }).join('');
-  barsHTML += `<div class="prob">Shortlist chance: <span style="color:#f87171;font-weight:700">${d.before||'?'}</span> → <span style="color:#6ee7b7;font-weight:700">${d.after||'?'}</span> after changes</div>`;
-  document.getElementById('bars').innerHTML = barsHTML;
+  const cfg=[{key:'ats',label:'ATS Compatibility',color:'#6366f1'},{key:'keywords',label:'Keyword Coverage',color:'#8b5cf6'},{key:'impact',label:'Impact & Metrics',color:'#ec4899'},{key:'maang_bar',label:'MAANG Bar Alignment',color:'#f59e0b'},{key:'structure',label:'Structure & Format',color:'#10b981'}];
+  document.getElementById('bars').innerHTML = cfg.map(({key,label,color})=>{const v=(d.scores||{})[key]||0;return `<div class="bar-row"><span class="bar-lbl">${label}</span><div class="bar"><div class="bar-fill" style="width:${v*10}%;background:${color}"></div></div><span class="bar-num" style="color:${color}">${v}/10</span></div>`;}).join('')+`<div class="prob">Shortlist: <span style="color:#f87171;font-weight:700">${d.before||'?'}</span> → <span style="color:#6ee7b7;font-weight:700">${d.after||'?'}</span></div>`;
+  document.getElementById('kwGrid').innerHTML=(d.keywords||[]).map(k=>`<span class="kw">+ ${k}</span>`).join('');
+  document.getElementById('changesList').innerHTML=(d.rewrites||[]).map(b=>`<div class="change"><div class="lbl">Before</div><div class="before">${b.orig}</div><div class="lbl">After</div><div class="after">${b.new}</div></div>`).join('');
+  document.getElementById('summaryBox').textContent=d.summary||'';
+}
 
-  document.getElementById('kwGrid').innerHTML = (d.keywords || [])
-    .map(k => `<span class="kw">+ ${k}</span>`).join('');
+function buildDoc(r,level,co){return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;margin:.9in 1in;color:#111;line-height:1.45}h1{font-size:18pt;font-weight:700;color:#1e3a5f;margin-bottom:2px}.contact{font-size:10pt;color:#555;margin-bottom:12px;border-bottom:1px solid #ddd;padding-bottom:8px}.sec{font-size:10.5pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;letter-spacing:.8px;border-bottom:1.5px solid #1e3a5f;margin:14px 0 7px;padding-bottom:2px}.summ{font-size:11pt;line-height:1.6;margin-bottom:8px}.jhead{display:flex;justify-content:space-between;margin-bottom:3px}.jtitle{font-weight:700}.jco{color:#444}.jdur{color:#666;font-size:10pt}ul{margin:3px 0 10px 17px}li{margin-bottom:3px;line-height:1.4}.sk{margin-bottom:4px}.edu{display:flex;justify-content:space-between;margin-bottom:4px}.tag{display:inline-block;background:#e8f0fe;color:#1e3a5f;font-size:9pt;padding:1px 7px;border-radius:3px;margin:2px;font-weight:600}.foot{font-size:8pt;color:#aaa;text-align:center;margin-top:18px;border-top:1px solid #eee;padding-top:6px}</style></head><body><h1>${r.name||'Your Name'}</h1><div class="contact">${r.contact||''}</div><div class="sec">Professional Summary</div><div class="summ">${r.summary||''}</div><div class="sec">Experience</div>${(r.experience||[]).map(j=>`<div class="jhead"><div><span class="jtitle">${j.title}</span> · <span class="jco">${j.company}</span></div><span class="jdur">${j.duration}</span></div><ul>${(j.bullets||[]).map(b=>`<li>${b}</li>`).join('')}</ul>`).join('')}<div class="sec">Skills</div>${(r.skills||[]).map(s=>`<div class="sk">• ${s}</div>`).join('')}<div class="sec">Education</div>${(r.education||[]).map(e=>`<div class="edu"><div><strong>${e.degree}</strong> — ${e.school}</div><div>${e.year}</div></div>`).join('')}${(r.certs||[]).length?`<div class="sec">Certifications</div><div>${r.certs.map(c=>`<span class="tag">${c}</span>`).join('')}</div>`:''}<div class="foot">Optimized for ${level} · ${co} · TPM Career Suite</div></body></html>`;}
 
-  document.getElementById('changesList').innerHTML = (d.rewrites || []).map(b => `
-    <div class="change">
-      <div class="lbl">Before</div>
-      <div class="before">${b.orig}</div>
-      <div class="lbl">After</div>
-      <div class="after">${b.new}</div>
+function download(){if(!docData)return;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([docData],{type:'application/msword'}));a.download='TPM_Resume_MAANG.doc';a.click();}
+
+// ═══ HIREIQ ═══
+function hideHireIdle(){document.getElementById('hireIdle').style.display='none';document.getElementById('hireSteps').style.display='flex';['h1','h2','h3','h4'].forEach(id=>{const e=document.getElementById(id);e.className='step';e.innerHTML=e.innerHTML;});}
+function showHireErr(msg){const e=document.getElementById('hireErr');e.style.display='block';e.textContent='⚠️ '+msg;}
+
+async function getResumeText(){
+  const b64 = hirePdfB64||pdfB64;
+  if(!b64) throw new Error('Please upload your resume PDF first (in this tab or Tab 1).');
+  return await api('Extract ALL resume text.',
+    [{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},{type:'text',text:'Extract ALL text. Every section, bullet, date, line.'}],2000);
+}
+
+async function scoreBatch(resumeText, jobs){
+  const list = jobs.map((j,i)=>`JOB ${i+1}: ${j.title} at ${j.company}\n${(j.description||'').slice(0,400)}`).join('\n\n');
+  const raw = await api('Return ONLY a valid JSON array. No markdown.',
+    `Score each job vs this resume. RESUME:${resumeText.slice(0,1800)}\nJOBS:\n${list}
+Return ONLY array (same order, one object per job): [{"score":85,"fit":"High","match_reasons":["r1","r2"],"gaps":["g1"]}]
+fit: High=75+, Medium=50-74, Low=<50`);
+  return JSON.parse(cleanJSON(raw));
+}
+
+async function searchJobs(){
+  document.getElementById('hireErr').style.display='none';
+  document.getElementById('jobResults').innerHTML='';
+  hideHireIdle();
+  const jsKey=document.getElementById('jsearchKey').value.trim();
+  const query=document.getElementById('jobQuery').value.trim()||'Staff Technical Program Manager';
+  const location=document.getElementById('jobLocation').value.trim()||'India';
+  try {
+    let jobs=[];
+    sA('h1','Searching jobs...');
+    if(jsKey){
+      const url=`https://jsearch.p.rapidapi.com/search?query=${encodeURIComponent(query+' '+location)}&num_pages=1&page=1`;
+      const res=await fetch(url,{headers:{'X-RapidAPI-Key':jsKey,'X-RapidAPI-Host':'jsearch.p.rapidapi.com'}});
+      if(res.ok){const data=await res.json();jobs=(data.data||[]).slice(0,8).map(j=>({title:j.job_title,company:j.employer_name,location:j.job_city||j.job_country||location,description:j.job_description,url:j.job_apply_link}));}
+    }
+    if(!jobs.length){
+      const raw=await api('Return ONLY valid JSON array.',
+        `Generate 6 realistic TPM job listings for "${query}" in "${location}" at top tech companies.
+Return ONLY: [{"title":"...","company":"...","location":"...","description":"2-3 sentence job description highlighting key responsibilities","url":"#"}]`);
+      jobs=JSON.parse(cleanJSON(raw));
+    }
+    sD('h1',`Found ${jobs.length} jobs`);
+
+    sA('h2','Reading your resume...');
+    const rt=await getResumeText();
+    sD('h2','Resume loaded');
+
+    sA('h3',`Scoring ${jobs.length} roles...`);
+    const scores=await scoreBatch(rt,jobs);
+    sD('h3','Fit scores ready');
+
+    sA('h4','Ranking by fit...');
+    const ranked=jobs.map((j,i)=>({...j,...(scores[i]||{score:50,fit:'Medium',match_reasons:[],gaps:[]})})).sort((a,b)=>(b.score||0)-(a.score||0));
+    sD('h4',`Ranked ${ranked.length} roles`);
+
+    renderJobs(ranked,rt);
+  } catch(err){
+    console.error(err); showHireErr(err.message);
+    ['h1','h2','h3','h4'].forEach(id=>{if(document.getElementById(id).classList.contains('active'))sF(id,'Failed');});
+  }
+}
+
+async function scoreJDs(){
+  const jds=document.getElementById('pasteJDs').value.trim();
+  if(!jds) return showHireErr('Please paste at least one job description.');
+  document.getElementById('hireErr').style.display='none';
+  document.getElementById('jobResults').innerHTML='';
+  hideHireIdle();
+  try {
+    const rawJDs=jds.split(/\n-{3,}\n/).map(s=>s.trim()).filter(Boolean);
+    sD('h1',`Parsed ${rawJDs.length} JD(s)`);
+
+    sA('h2','Reading your resume...');
+    const rt=await getResumeText();
+    sD('h2','Resume loaded');
+
+    sA('h3','Extracting job meta & scoring...');
+    const metaRaw=await api('Return ONLY valid JSON array.',
+      `Extract title and company from each JD. Return ONLY: [{"title":"...","company":"..."}]
+${rawJDs.map((j,i)=>`--- JD ${i+1} ---\n${j.slice(0,400)}`).join('\n')}`);
+    const meta=JSON.parse(cleanJSON(metaRaw));
+    const jobs=meta.map((m,i)=>({...m,description:rawJDs[i],url:'#',location:''}));
+    const scores=await scoreBatch(rt,jobs);
+    sD('h3','Scores ready');
+
+    sA('h4','Ranking...');
+    const ranked=jobs.map((j,i)=>({...j,...(scores[i]||{score:50,fit:'Medium',match_reasons:[],gaps:[]})})).sort((a,b)=>(b.score||0)-(a.score||0));
+    sD('h4',`Ranked ${ranked.length} roles`);
+    renderJobs(ranked,rt);
+  } catch(err){
+    console.error(err); showHireErr(err.message);
+    ['h1','h2','h3','h4'].forEach(id=>{if(document.getElementById(id).classList.contains('active'))sF(id,'Failed');});
+  }
+}
+
+function fitCls(f){return f==='High'?'fit-high':f==='Low'?'fit-low':'fit-med';}
+
+function renderJobs(jobs, resumeText){
+  window._jobs=jobs; window._rt=resumeText;
+  document.getElementById('jobResults').innerHTML=
+    `<p style="font-size:11px;color:#64748b;margin-bottom:12px">Showing ${jobs.length} roles ranked by fit score</p>`+
+    jobs.map((j,i)=>`
+    <div class="job-card">
+      <div class="job-header">
+        <div><div class="job-title">${j.title||'TPM Role'}</div><div class="job-co">🏢 ${j.company||'Company'}${j.location?' &nbsp;·&nbsp; 📍 '+j.location:''}</div></div>
+        <div style="text-align:right"><div class="score-ring">${j.score||'?'}%</div><span class="fit-badge ${fitCls(j.fit)}">${j.fit||'Medium'} Fit</span></div>
+      </div>
+      <div class="job-meta">
+        ${(j.match_reasons||[]).slice(0,3).map(r=>`<span class="job-tag" style="color:#6ee7b7">✓ ${r}</span>`).join('')}
+        ${(j.gaps||[]).slice(0,2).map(g=>`<span class="job-tag" style="color:#f87171">⚠ ${g}</span>`).join('')}
+      </div>
+      <div class="job-desc">${(j.description||'').slice(0,180)}${(j.description||'').length>180?'...':''}</div>
+      <div class="job-actions">
+        <button class="job-btn job-btn-apply" onclick="${j.url&&j.url!=='#'?`window.open('${j.url}','_blank')`:'void(0)'}" ${(!j.url||j.url==='#')?'style="opacity:0.4;cursor:default"':''}>🔗 ${j.url&&j.url!=='#'?'Apply Now':'No Link'}</button>
+        <button class="job-btn job-btn-tailor" onclick="tailorJob(${i})">✍️ Tailor My Resume</button>
+      </div>
     </div>`).join('');
-
-  document.getElementById('summaryBox').textContent = d.summary || '';
 }
 
-function buildDoc(r, level, company) {
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
-<style>
-  body{font-family:Calibri,Arial,sans-serif;font-size:11pt;margin:.9in 1in;color:#111;line-height:1.45}
-  h1{font-size:18pt;font-weight:700;color:#1e3a5f;margin-bottom:2px}
-  .contact{font-size:10pt;color:#555;margin-bottom:12px;border-bottom:1px solid #ddd;padding-bottom:8px}
-  .sec{font-size:10.5pt;font-weight:700;color:#1e3a5f;text-transform:uppercase;letter-spacing:.8px;border-bottom:1.5px solid #1e3a5f;margin:14px 0 7px;padding-bottom:2px}
-  .summ{font-size:11pt;color:#222;line-height:1.6;margin-bottom:8px}
-  .jhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
-  .jtitle{font-size:11pt;font-weight:700}.jco{font-size:10.5pt;color:#444}.jdur{font-size:10pt;color:#666}
-  ul{margin:3px 0 10px 17px}li{font-size:10.5pt;color:#222;margin-bottom:3px;line-height:1.4}
-  .sk{font-size:10.5pt;color:#222;margin-bottom:4px}
-  .edu{display:flex;justify-content:space-between;font-size:10.5pt;margin-bottom:4px}
-  .tag{display:inline-block;background:#e8f0fe;color:#1e3a5f;font-size:9pt;padding:1px 7px;border-radius:3px;margin:2px;font-weight:600}
-  .foot{font-size:8pt;color:#aaa;text-align:center;margin-top:18px;border-top:1px solid #eee;padding-top:6px}
-</style></head><body>
-<h1>${r.name||'Your Name'}</h1>
-<div class="contact">${r.contact||''}</div>
-<div class="sec">Professional Summary</div>
-<div class="summ">${r.summary||''}</div>
-<div class="sec">Experience</div>
-${(r.experience||[]).map(j=>`
-<div class="jhead"><div><span class="jtitle">${j.title}</span> &nbsp;·&nbsp; <span class="jco">${j.company}</span></div><span class="jdur">${j.duration}</span></div>
-<ul>${(j.bullets||[]).map(b=>`<li>${b}</li>`).join('')}</ul>`).join('')}
-<div class="sec">Core Skills &amp; Tools</div>
-${(r.skills||[]).map(s=>`<div class="sk">• ${s}</div>`).join('')}
-<div class="sec">Education</div>
-${(r.education||[]).map(e=>`<div class="edu"><div><strong>${e.degree}</strong> — ${e.school}</div><div>${e.year}</div></div>`).join('')}
-${(r.certs||[]).length?`<div class="sec">Certifications</div><div>${r.certs.map(c=>`<span class="tag">${c}</span>`).join('')}</div>`:''}
-<div class="foot">Optimized for ${level} · ${company} · TPM Resume Updater</div>
-</body></html>`;
+async function tailorJob(idx){
+  const j=window._jobs[idx], rt=window._rt;
+  document.getElementById('modalTitle').textContent=`Tailored for: ${j.title}`;
+  document.getElementById('modalSub').textContent=`${j.company} — generating personalised summary, keywords & cover note`;
+  document.getElementById('modalBody').innerHTML=`<div class="modal-spin"><div class="spin"></div> Generating your tailored application package...</div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+  try {
+    const raw=await api('Return ONLY valid JSON.',
+      `Tailor this resume for the job. RESUME:${rt.slice(0,1500)} JOB:${(j.description||'').slice(0,700)}
+Return ONLY: {"tailored_summary":"3 sentence summary matching this JD","top_keywords":["k1","k2","k3","k4","k5"],"cover_note":"3 paragraph cover letter opening for this role","key_bullets":["bullet1","bullet2","bullet3"],"why_fit":"2 sentence fit explanation"}`);
+    const d=JSON.parse(cleanJSON(raw));
+    document.getElementById('modalBody').innerHTML=`
+      <div class="modal-sec"><h4>🎯 Tailored Summary</h4><p>${d.tailored_summary||''}</p></div>
+      <div class="modal-sec"><h4>🔑 Keywords to Emphasise</h4><div class="kw-grid">${(d.top_keywords||[]).map(k=>`<span class="kw">${k}</span>`).join('')}</div></div>
+      <div class="modal-sec"><h4>✍️ Bullets to Highlight</h4>${(d.key_bullets||[]).map(b=>`<p style="margin-bottom:6px;padding:8px;background:#0d1117;border-radius:6px;font-size:12px;color:#6ee7b7">• ${b}</p>`).join('')}</div>
+      <div class="modal-sec"><h4>📝 Cover Note</h4><p style="white-space:pre-line">${d.cover_note||''}</p></div>
+      <div class="modal-sec"><h4>💡 Why You're a Strong Fit</h4><p>${d.why_fit||''}</p></div>`;
+  } catch(err){document.getElementById('modalBody').innerHTML=`<p style="color:#f87171">⚠️ ${err.message}</p>`;}
 }
 
-function download() {
-  if (!docData) return;
-  const blob = new Blob([docData], { type: 'application/msword' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'TPM_Resume_MAANG_Updated.doc';
-  a.click();
-}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open');}
 </script>
 </body>
 </html>

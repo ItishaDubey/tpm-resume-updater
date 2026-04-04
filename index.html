@@ -263,13 +263,13 @@ async function api(system, content, tokens = 4000) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true', 'x-api-key': document.getElementById('apiKey').value },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: tokens,
       system,
       messages: msgs
     })
   });
-  if (!res.ok) throw new Error('API error ' + res.status);
+  if (!res.ok) { const errData = await res.json(); throw new Error(errData?.error?.message || 'API error ' + res.status); }
   const d = await res.json();
   return d.content.filter(b => b.type === 'text').map(b => b.text).join('');
 }
